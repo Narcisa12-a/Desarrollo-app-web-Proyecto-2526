@@ -6,7 +6,7 @@
 
 <a href="/agregar">Agregar Producto</a>
 
-<table border="1">
+<table>
 
 <tr>
 <th>ID</th>
@@ -18,10 +18,10 @@
 {% for p in productos %}
 
 <tr>
-<td>{{p[0]}}</td>
-<td>{{p[1]}}</td>
-<td>{{p[2]}}</td>
-<td>{{p[3]}}</td>
+<td>{{p.id}}</td>
+<td>{{p.nombre}}</td>
+<td>{{p.cantidad}}</td>
+<td>{{p.precio}}</td>
 </tr>
 
 {% endfor %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Datos almacenados</h2>
+
+<h3>TXT</h3>
+
+<pre>{{txt}}</pre>
+
+<h3>JSON</h3>
+
+<pre>
+
+{% for linea in json_data %}
+{{linea}}
+{% endfor %}
+
+</pre>
+
+<h3>CSV</h3>
+
+<pre>
+
+{% for linea in csv_data %}
+{{linea}}
+{% endfor %}
+
+</pre>
+
+{% endblock %}

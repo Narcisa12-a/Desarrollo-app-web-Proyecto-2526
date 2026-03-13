@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cat Cake - Tienda de Postres</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+<title>Tienda de Postres</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
 </head>
 
 <body>
 
-<header>
-    <h1>Cat Cake 🍰</h1>
+<h1>Tienda de Postres</h1>
 
-    <nav>
-        <a href="/">Inicio</a>
-        <a href="/about">Acerca de</a>
-        <a href="/productos">Productos</a>
-    </nav>
-</header>
+<nav>
 
-<main>
+<a href="/">Inicio</a> |
+<a href="/about">Acerca</a> |
+<a href="/productos">Productos</a> |
+<a href="/datos">Datos</a>
+
+</nav>
+
+<hr>
+
 {% block content %}
-{% endblock %}
-</main>
 
-<footer>
-<p>© 2026 Cat Cake - Tienda de Postres</p>
-</footer>
+{% endblock %}
 
 </body>
 </html>
