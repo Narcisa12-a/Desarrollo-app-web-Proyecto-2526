@@ -2,14 +2,30 @@
 
 {% block content %}
 
-<h2>Nuestros Postres</h2>
+<h2>Inventario de Postres</h2>
 
-<ul>
-<li>Brownies</li>
-<li>Cheesecake</li>
-<li>Cupcakes</li>
-<li>Torta de Chocolate</li>
-<li>Pudin de Chocolate</li>
-</ul>
+<a href="/agregar">Agregar Producto</a>
+
+<table border="1">
+
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Cantidad</th>
+<th>Precio</th>
+</tr>
+
+{% for p in productos %}
+
+<tr>
+<td>{{p[0]}}</td>
+<td>{{p[1]}}</td>
+<td>{{p[2]}}</td>
+<td>{{p[3]}}</td>
+</tr>
+
+{% endfor %}
+
+</table>
 
 {% endblock %}
