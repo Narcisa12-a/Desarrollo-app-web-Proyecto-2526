@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Productos almacenados en MySQL</h2>
+
+<a class="btn" href="/mysql_agregar">Agregar producto</a>
+
+<table>
+
+<tr>
+<th>ID</th>
+<th>Nombre</th>
+<th>Cantidad</th>
+<th>Precio</th>
+<th>Acciones</th>
+</tr>
+
+{% for p in productos %}
+
+<tr>
+
+<td>{{p[0]}}</td>
+<td>{{p[1]}}</td>
+<td>{{p[2]}}</td>
+<td>{{p[3]}}</td>
+
+<td>
+<a href="/mysql_eliminar/{{p[0]}}">Eliminar</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}
