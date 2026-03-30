@@ -1,95 +1,37 @@
-body{
-font-family: Arial, sans-serif;
-background:#fff0f5;
-margin:0;
-padding:0;
+body {
+    background-color: #fff0f5; /* rosado suave */
+    font-family: 'Segoe UI', sans-serif;
 }
 
-.container{
-width:80%;
-margin:auto;
-padding:30px;
-background:white;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-margin-top:30px;
-border-radius:10px;
+h1, h2, h3 {
+    color: #d63384; /* rosado fuerte */
 }
 
-h1{
-color:#d63384;
-text-align:center;
+.navbar {
+    background-color: #f8c8dc !important;
 }
 
-h2{
-color:#c2185b;
+.btn-primary {
+    background-color: #ff85a2;
+    border: none;
 }
 
-nav{
-text-align:center;
-margin-bottom:20px;
+.btn-primary:hover {
+    background-color: #ff5c8a;
 }
 
-nav a{
-margin:0 10px;
-text-decoration:none;
-font-weight:bold;
-color:#d63384;
+.btn-warning {
+    background-color: #ffc2d1;
+    border: none;
 }
 
-nav a:hover{
-color:#ff69b4;
+.table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
 }
 
-table{
-border-collapse:collapse;
-width:100%;
-background:white;
-margin-top:15px;
-}
-
-th{
-background:#ffb6c1;
-color:#333;
-padding:10px;
-}
-
-td{
-border:1px solid #ddd;
-padding:10px;
-text-align:center;
-}
-
-tr:nth-child(even){
-background:#ffe4ec;
-}
-
-button{
-background:#ff69b4;
-color:white;
-border:none;
-padding:10px 15px;
-border-radius:5px;
-cursor:pointer;
-}
-
-button:hover{
-background:#d63384;
-}
-
-.btn{
-background:#ff69b4;
-color:white;
-padding:8px 12px;
-border-radius:5px;
-text-decoration:none;
-}
-
-.btn:hover{
-background:#d63384;
-}
-
-.eliminar{
-color:red;
-text-decoration:none;
-font-weight:bold;
+.table thead {
+    background-color: #ff85a2;
+    color: white;
 }

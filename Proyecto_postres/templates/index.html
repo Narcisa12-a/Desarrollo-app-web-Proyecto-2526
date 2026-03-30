@@ -2,8 +2,16 @@
 
 {% block content %}
 
-<h2>Bienvenido a la Tienda de Postres</h2>
+<div class="text-center">
 
-<p>Sistema de gestión de inventario de postres.</p>
+    <h1 class="mb-4">🍰 Bienvenidos a Cat Cake</h1>
+
+    <p class="lead">Lugar de los mejores postres</p>
+
+    <img src="{{ url_for('static', filename='img/catcake.jpg') }}"
+        class="img-fluid mt-3"
+        style="max-width: 400px;">
+
+</div>
 
 {% endblock %}

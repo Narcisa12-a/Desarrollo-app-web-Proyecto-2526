@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Formulario de Producto</h2>
+
+<form method="POST">
+    <label>Nombre:</label><br>
+    <input type="text" name="nombre" value="{{ producto[1] }}"><br><br>
+
+    <label>Cantidad:</label><br>
+    <input type="text" name="cantidad" value="{{ producto[2] }}"><br><br>
+
+    <label>Precio:</label><br>
+    <input type="number" name="precio" value="{{ producto[3] }}"><br><br>
+
+    <label>Stock:</label><br>
+    <input type="number" name="stock" value="{{ producto[4] }}"><br><br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+{% endblock %}

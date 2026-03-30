@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="mb-4">Lista de Productos</h2>
+
+<div class="mb-3 d-flex justify-content-between">
+    
+    <a href="{{ url_for('crear_producto') }}" class="btn btn-success">
+        <i class="bi bi-plus-lg"></i> Nuevo
+    </a>
+
+    <!-- BOTÓN PDF -->
+    <a href="{{ url_for('reporte_pdf') }}" class="btn btn-danger">
+        <i class="bi bi-file-earmark-pdf-fill"></i> Descargar PDF
+    </a>
+
+</div>
+
+<div class="table-responsive">
+<table class="table table-striped table-bordered table-hover text-center">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for p in productos %}
+        <tr>
+            <td>{{ p[0] }}</td>
+            <td>{{ p[1] }}</td>
+            <td>{{ p[2] }}</td>
+            <td>{{ p[3] }}</td>
+            <td>{{ p[4] }}</td>
+            <td>
+                <!--Editar-->
+                <a href="{{ url_for('editar_producto', id=p[0]) }}" class="btn btn-warning btn-sm">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+                
+                <!--Eliminar-->
+                <a href="{{ url_for('eliminar_producto', id=p[0]) }}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('¿Eliminar este producto?')">            
+                    <i class="bi bi-trash3-fill"></i>
+                </a>
+            </td>
+        </tr>    
+        {% endfor %}
+    </tbody>   
+</table>
+</div>
+
+{% endblock %}
