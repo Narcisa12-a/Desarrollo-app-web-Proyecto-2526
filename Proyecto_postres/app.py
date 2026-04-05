@@ -18,13 +18,10 @@ from datetime import datetime
 app = Flask(__name__)
 app.secret_key = "clave_secreta"
 
-# =========================
-# 🔐 LOGIN
-# =========================
+# LOGIN
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -39,23 +36,16 @@ def load_user(user_id):
         return Usuario(user[0], user[1], user[2], user[3])  # 👈 4 campos
     return None
 
-
-# =========================
-# 🏠 INICIO / ACERCA
-# =========================
+# INICIO / ACERCA
 @app.route("/")
 def inicio():
     return render_template("index.html")
-
 
 @app.route("/acerca")
 def acerca():
     return render_template("about.html")
 
-
-# =========================
-# 🔐 LOGIN
-# =========================
+# LOGIN
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -80,10 +70,7 @@ def login():
 
     return render_template("login.html")
 
-
-# =========================
-# 📝 REGISTRO
-# =========================
+# REGISTRO
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
     if request.method == "POST":
@@ -106,20 +93,14 @@ def registro():
 
     return render_template("registro.html")
 
-
-# =========================
-# 🚪 LOGOUT
-# =========================
+# LOGOUT
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("login"))
 
-
-# =========================
-# 🧁 PRODUCTOS (CRUD)
-# =========================
+# PRODUCTOS (CRUD)
 @app.route("/productos")
 @login_required
 def listar_productos():
@@ -135,11 +116,8 @@ def crear_producto():
         cantidad = request.form["cantidad"]
         precio = request.form["precio"]
         stock = request.form["stock"]
-
         insertar_producto(nombre, cantidad, precio, stock)
-
         return redirect(url_for("listar_productos"))
-
     return render_template("productos/crear.html")
 
 
@@ -151,12 +129,9 @@ def editar_producto(id):
         cantidad = request.form["cantidad"]
         precio = request.form["precio"]
         stock = request.form["stock"]
-
         actualizar_producto(id, nombre, cantidad, precio, stock)
-
         return redirect(url_for("listar_productos"))
-
-    producto = obtener_producto_por_id(id)
+    producto = obtener_producto(id)
     return render_template("productos/editar.html", producto=producto)
 
 
@@ -166,85 +141,115 @@ def eliminar_producto(id):
     eliminar_producto_db(id)
     return redirect(url_for("listar_productos"))
 
-
-# =========================
-# 👤 CLIENTES
-# =========================
+# CLIENTES
 @app.route("/clientes")
 @login_required
 def listar_clientes():
     conexion = conectar()
     cursor = conexion.cursor()
-
     cursor.execute("SELECT * FROM clientes")
     clientes = cursor.fetchall()
-
     conexion.close()
+
     return render_template("clientes/lista.html", clientes=clientes)
 
+@app.route("/clientes/crear", methods=["GET", "POST"])
+@login_required
+def crear_cliente():
+    if request.method == "POST":
+        nombre = request.form["nombre"]
+        email = request.form["email"]
+        conexion = conectar()
+        cursor = conexion.cursor()
+        cursor.execute(
+            "INSERT INTO clientes (nombre, email) VALUES (%s, %s)",
+            (nombre, email)
+        )
+        conexion.commit()
+        conexion.close()
+        return redirect(url_for("listar_clientes"))
+    return render_template("clientes/crear.html")
 
-# =========================
-# 🧾 VENTAS (JOIN)
-# =========================
+# VENTAS (JOIN)
 @app.route("/ventas")
 @login_required
 def listar_ventas():
     conexion = conectar()
     cursor = conexion.cursor()
-
     cursor.execute("""
         SELECT v.id_venta, c.nombre, p.nombre, v.cantidad
         FROM ventas v
         JOIN clientes c ON v.id_cliente = c.id_cliente
         JOIN productos p ON v.id_producto = p.id_producto
     """)
-
     ventas = cursor.fetchall()
     conexion.close()
-
     return render_template("ventas/lista.html", ventas=ventas)
 
+@app.route("/ventas/crear", methods=["GET", "POST"])
+@login_required
+def crear_venta():
+    conexion = conectar()
+    cursor = conexion.cursor()
+    cursor.execute("SELECT * FROM clientes")
+    clientes = cursor.fetchall()
+    cursor.execute("SELECT * FROM productos")
+    productos = cursor.fetchall()
+    if request.method == "POST":
+        id_cliente = request.form["id_cliente"]
+        id_producto = request.form["id_producto"]
+        cantidad = int(request.form["cantidad"])
+        #Consultar stock actual
+        cursor.execute("SELECT stock FROM productos WHERE id_producto = %s", (id_producto,))
+        producto = cursor.fetchone()
+        stock_actual = producto[0]
+        #Validación de stock
+        if cantidad > stock_actual :
+            conexion.close()
+            return "Error: No hay suficiente stock disponible"
+        #Insertar venta
+        cursor.execute(
+            "INSERT INTO ventas (id_cliente, id_producto, cantidad) VALUES (%s, %s, %s)",
+            (id_cliente, id_producto, cantidad)
+        )
+        #Restar stock automáticamente 
+        cursor.execute(
+            "UPDATE productos SET stock = stock - %s WHERE id_producto = %s",
+            (cantidad, id_producto)
+        )
+        conexion.commit()
+        conexion.close()
+        return redirect(url_for("listar_ventas"))
+    conexion.close()
+    return render_template("ventas/crear.html", clientes=clientes, productos=productos)
 
-# =========================
-# 📄 PDF
-# =========================
+# PDF
 @app.route("/reporte_pdf")
 @login_required
 def reporte_pdf():
     buffer = io.BytesIO()
-
     # Crear documento
     doc = SimpleDocTemplate(buffer)
-
     elementos = []
-
     # Estilos
     estilos = getSampleStyleSheet()
-
     # TÍTULO
     titulo = Paragraph("🍰 Cat Cake - Reporte de Productos", estilos['Title'])
     elementos.append(titulo)
-
     # FECHA
     fecha = Paragraph(f"Fecha: {datetime.now().strftime('%d/%m/%Y')}", estilos['Normal'])
     elementos.append(fecha)
-
     # Espacio
     elementos.append(Paragraph("<br/><br/>", estilos['Normal']))
-
     # DATOS
     productos = obtener_productos()
-
     # Encabezados
     data = [["ID", "Nombre", "Cantidad", "Precio", "Stock"]]
-
     # Filas
     for p in productos:
         data.append([p[0], p[1], p[2], f"${p[3]}", p[4]])
-
     # Crear tabla
     tabla = Table(data)
-
     # Estilo de tabla
     tabla.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), colors.pink),
@@ -262,16 +267,11 @@ def reporte_pdf():
     ]))
 
     elementos.append(tabla)
-
     # Construir PDF
     doc.build(elementos)
-
     buffer.seek(0)
-
     return send_file(buffer, as_attachment=True, download_name="reporte_productos.pdf")
 
-# =========================
-# ▶️ EJECUTAR
-# =========================
+#EJECUTAR
 if __name__ == "__main__":
     app.run(debug=True)

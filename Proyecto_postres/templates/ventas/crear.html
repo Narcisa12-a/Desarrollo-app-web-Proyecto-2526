@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Nueva Venta</h2>
+
+<form method="POST">
+
+<select name="id_cliente" class="form-control mb-2">
+    {% for c in clientes %}
+        <option value="{{ c[0] }}">{{ c[1] }}</option>
+    {% endfor %}
+</select>
+
+<select name="id_producto" class="form-control mb-2">
+    {% for p in productos %}
+        <option value="{{ p[0] }}">{{ p[1] }}</option>
+    {% endfor %}
+</select>
+
+<input type="number" name="cantidad" class="form-control mb-2" placeholder="Cantidad">
+
+<button class="btn btn-success">Guardar</button>
+
+</form>
+
+{% endblock %}

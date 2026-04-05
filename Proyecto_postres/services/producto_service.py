@@ -3,7 +3,7 @@ from conexion.conexion import conectar
 def obtener_productos():
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM productos")
+    cursor.execute("SELECT * FROM productos WHERE estado = 1")
     datos = cursor.fetchall()
     conn.close()
     return datos
@@ -39,6 +39,6 @@ def actualizar_producto(id, nombre, cantidad, precio, stock):
 def eliminar_producto_db(id):
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("DELETE FROM productos WHERE id_producto=%s", (id,))
+    cursor.execute("UPDATE productos SET estado = 0 WHERE id_producto=%s", (id,))
     conn.commit()
     conn.close()
